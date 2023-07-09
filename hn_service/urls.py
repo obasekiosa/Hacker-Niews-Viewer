@@ -16,8 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from news_viewer.api_routers import router
+
+import news_viewer.views as views
+
 
 urlpatterns = [
+    path("", views.IndexView.as_view()),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path("api/v1/", include(router.urls)),
+    path("stories/", include("news_viewer.urls")),
 ]
