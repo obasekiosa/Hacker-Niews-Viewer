@@ -35,7 +35,7 @@ All api calls occur on the base url
 ### `/stories/`
 This end point supports POST and GET requests for the creation of stories and Viewing of a list of stories
 
-- Post
+- POST
     ```json
     {
     "text": "string",
@@ -70,7 +70,7 @@ supports a GET and POST request to List all direct comments for or add a comment
 ### `/comments/`
 This end point supports POST and GET requests for the creation of stories and Viewing of a list of stories
 
-- Post
+- POST
     ```json
     {
     "text": "string",
