@@ -1,0 +1,72 @@
+{% extends "news_viewer/base.html" %}
+
+{% block title %} Latests Stories {% endblock %}
+
+
+{% block content %}
+{% if latest_stories_list %}
+
+
+
+<div class="container mt-4">
+
+    <ul class="list-group">
+        {% for story in latest_stories_list %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                        <a href="{% url 'story' story.id %}">
+                        {% if story.origin %}
+                            [Original]
+                        {% endif %}
+                        {{ story.title }}
+                        </a>  
+
+                        <small class="text-muted">by {{story.source_creator_id }}</small>
+                    </div>
+                    <small>{{ story.created_at|timesince}} ago</small>
+                    <small >
+                    {% if story.url %}
+                    <a href="{{ story.url }}/">
+                        News Link
+                    </a>
+                    {% else %}
+                    <a href="{% url 'story' story.id %}">
+                        News Link
+                    </a>
+                    {% endif %}
+                    </small>
+                </div>
+                <span class="badge bg-info rounded-pill">{{ story.score }}</span>
+              
+        </li>
+        {% endfor %}
+    </ul>
+    
+    
+    <nav class="" aria-label="Page navigation">
+        <ul class="pagination flex-row justify-content-center">
+            <li class="page-item"><a class="page-link" href="?page=1&{{ mod_query_params.urlencode }}">&laquo; 1</a></li>
+            {% if page_obj.has_previous %}
+                <li class="page-item" ><a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ mod_query_params.urlencode }}">Previous</a></li>
+            {% else %}
+                <li class="page-item" ><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+
+            <li class="page-item"><a class="page-link" href="#"> {{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+                <li><a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ mod_query_params.urlencode }}">Next</a></li>
+            {% else %}
+                <li><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+            <li><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ mod_query_params.urlencode }}">{{ page_obj.paginator.num_pages }} &raquo;</a></li>
+            
+        </ul>
+        </nav>
+    {% else %}
+        <p>No stories are available.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

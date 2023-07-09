@@ -1,0 +1,49 @@
+{% extends "news_viewer/base.html" %}
+
+{% block title %} {{ story.title }} {% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2>
+        {% if story.origin %}
+        [Original]
+        {% endif %}
+        {{ story.title }}
+        <em>by {{story.source_creator_id}} </em>
+        <small class="text-muted"> - {{ story.created_at|timesince}} ago </small>
+    </h2>
+   
+    {% autoescape off %}
+    {% if story.text %}
+    <h4 class="mt-4 text-muted">
+        {{ story.text }}
+    </h4>
+    {% endif %}
+   
+    <ul>
+        <div class="list-group">
+            {% if story.comment_set.all|length > 0%}
+            {% for comment in story.direct_comments %}
+            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">by {{ comment.source_creator_id }}</h5>
+                  <small>{{ comment.created_at|timesince }}</small>
+                </div>
+                <p class="mb-1">{{ comment.text }}</p>
+                <small class="text-muted">Source: {{ comment.origin|yesno:"NW,HN,IDK" }}.</small>
+              </a>
+            {% endfor %}
+
+            {% else %}
+            <p> No comments</p>
+            {% endif %}
+        </div>
+    </ul>
+    {% endautoescape %}
+</div>
+
+
+
+{% endblock %}
