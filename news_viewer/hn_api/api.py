@@ -24,14 +24,20 @@ class HackerNewsApi:
             return list(map(self.get_item_by_id, self.get_top_stories_id()))
         
     
-    def get_latest_stories(self, size = None, stop_id = None):
+    def get_latest_stories(self, size = None, stop_id = None, desc = True):
         story_ids = self.get_new_stories_id()
         if size is not None:
             story_ids = story_ids[:size]
 
+        if not desc:
+            story_ids.reverse() # puts the id's in ascending order
+        
         for id in story_ids:
             if stop_id is not None and id <= stop_id:
-                return
+                if desc:
+                    return
+                else:
+                    continue
             yield self.get_item_by_id(id)
     
 
