@@ -5,3 +5,4 @@ from . import views_api
 router = routers.DefaultRouter()
 router.register(r'stories', views_api.StoryViewSet)
 router.register(r"comments", views_api.CommentViewSet)
+router.register(r"cron", views_api.TriggerCronViewSet, basename="cron")

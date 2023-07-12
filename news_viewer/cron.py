@@ -47,7 +47,7 @@ class HNApiScraper(CronJobBase):
             item.direct_comment_count = len(story.kids) if story.kids else 0
             item.item_type = story.type
 
-            item.comment_count = story.descendants
+            item.comment_count = story.descendants or 0
             item.text = story.text
             item.url = story.url
             item.title = story.title

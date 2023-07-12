@@ -1,3 +1,5 @@
+from threading import Thread
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -10,7 +12,18 @@ from url_filter.integrations.drf import DjangoFilterBackend
 from .serializers.story_serializer import StroySerializer, CreateStorySerializer, UpdateStorySerializer
 from .serializers.comment_serializer import CommentSerializer, CreateCommentSerializer, UpdateCommentSerializer
 from .models import Story, Comment
-    
+from .cron import HNApiScraper
+
+
+class TriggerCronViewSet(viewsets.ViewSet):
+    basename = "cron_trigger"
+    permission_classes = []
+    @action(detail=False)
+    def trigger(self, request):
+        scrapper = HNApiScraper()
+        thread = Thread(target=scrapper.do)
+        thread.start()
+        return Response("success")
 
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.order_by("-source_created_at")
