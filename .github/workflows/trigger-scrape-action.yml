@@ -7,7 +7,6 @@ jobs:
   trigger-scrape:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger EndPoint
-        - run: echo "Triggering"
-        - run: curl https://hn-service.onrender.com/api/v1/cron/trigger/
-        - run: echo "Done"
+      - run: echo "Triggering"
+      - run: curl https://hn-service.onrender.com/api/v1/cron/trigger/
+      - run: echo "Done"
