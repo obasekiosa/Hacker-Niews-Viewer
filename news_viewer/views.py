@@ -1,12 +1,15 @@
 from typing import Any, Dict
 from django.shortcuts import render, get_object_or_404
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponse
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from url_filter.filtersets import ModelFilterSet
 
 from .models import Story
 
+
+def index(request):
+    return HttpResponse("Hello World")
 
 class IndexView(ListView):
     template_name = "news_viewer/index.html"
