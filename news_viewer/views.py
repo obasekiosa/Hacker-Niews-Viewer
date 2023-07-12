@@ -8,9 +8,6 @@ from url_filter.filtersets import ModelFilterSet
 from .models import Story
 
 
-def index(request):
-    return HttpResponse("Hello World")
-
 class IndexView(ListView):
     template_name = "news_viewer/index.html"
     context_object_name = "latest_stories_list"

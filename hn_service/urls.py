@@ -22,6 +22,9 @@ import news_viewer.views as views
 
 
 urlpatterns = [
+    path("", views.IndexView.as_view()),
     path('admin/', admin.site.urls),
-    path("", views.index),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path("api/v1/", include(router.urls)),
+    path("stories/", include("news_viewer.urls"))
 ]
