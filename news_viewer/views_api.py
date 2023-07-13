@@ -12,18 +12,38 @@ from url_filter.integrations.drf import DjangoFilterBackend
 from .serializers.story_serializer import StroySerializer, CreateStorySerializer, UpdateStorySerializer
 from .serializers.comment_serializer import CommentSerializer, CreateCommentSerializer, UpdateCommentSerializer
 from .models import Story, Comment
-from .cron import HNApiScraper
-
+from .cron import forever_task
 
 class TriggerCronViewSet(viewsets.ViewSet):
     basename = "cron_trigger"
     permission_classes = []
+
+    THREADS = []
+
     @action(detail=False)
     def trigger(self, request):
-        scrapper = HNApiScraper()
-        thread = Thread(target=scrapper.do)
+        cls = self.__class__
+        num_threads = len(cls.THREADS)
+        if num_threads == 0:
+            self.start_thread()
+            return Response("success")
+        elif num_threads == 1:
+            thread = cls.THREADS[0]
+            if thread.is_alive():
+                return Response("already pulling")
+            else:
+                cls.THREADS = []
+                self.start_thread()
+                return Response("success, restarted")
+        else:
+            return Response(f"warning multiple pulls: thread count {num_threads}")
+
+    def start_thread(self):
+        thread = Thread(target=forever_task)
         thread.start()
-        return Response("success")
+        thread.is_alive()
+        cls = self.__class__
+        cls.THREADS.append(thread)
 
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.order_by("-source_created_at")

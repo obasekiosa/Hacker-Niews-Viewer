@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import time
 
 from django.utils.timezone import make_aware
 from django_cron import CronJobBase, Schedule
@@ -141,3 +142,16 @@ class HNApiScraper(CronJobBase):
             completed_comments_for_parent += 1
         
         self.log.info(f"Saved {completed_comments_for_parent} new Sub comments for {type(parent).__name__} with id {parent.id}")
+
+_SLEEP_TIME = 5 * 60 # 5 minutes
+def forever_task():
+    count = 0
+    while True:
+        scrapper = HNApiScraper()
+        log = logging.getLogger(name="ForeverTaskThread")
+        log.setLevel(level=logging.DEBUG)
+        log.info(f"{count} Start Pull at {datetime.now()}")
+        scrapper.do()
+        log.info(f"{count} End Pull at {datetime.now()}")
+        count += 1
+        time.sleep(_SLEEP_TIME)
