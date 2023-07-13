@@ -14,6 +14,12 @@
         <em>by {{story.source_creator_id}} </em>
         <small class="text-muted"> - {{ story.created_at|timesince}} ago </small>
     </h2>
+
+    <a class="text-muted" href="{{ story.url }}">
+        <h3>
+            News Link
+        </h3>
+    </a>
    
     {% autoescape off %}
     {% if story.text %}
